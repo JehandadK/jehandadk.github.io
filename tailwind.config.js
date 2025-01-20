@@ -36,6 +36,23 @@ module.exports = {
           700: '#4a5568',
           800: '#2d3748',
           900: '#1a202c',
+
+          // Dark mode colors
+          DEFAULT: '#374151', // Set this as the default dark gray
+          'dark-100': '#1F2937', // Darker than gray-500
+          'dark-200': '#111827', // Darker than gray-700
+        },
+        // You can define additional colors for dark theme here
+        dark: {
+          100: '#f1f5f9', // Light gray for dark mode
+          200: '#d1d5db', // Gray for dark mode
+          300: '#9ca3af', // Medium gray for dark mode
+          400: '#6b7280', // Dark gray for dark mode
+          500: '#4b5563', // Darker gray for dark mode
+          600: '#374151', // Darker gray for dark mode
+          700: '#1f2937', // Dark gray for dark mode
+          800: '#1a202c', // Very dark gray for dark mode
+          900: '#0f172a', // Almost black for dark mode
         },
       },
       lineHeight: {
@@ -43,5 +60,6 @@ module.exports = {
       },
     },
   },
+  darkMode: 'class', // or 'media' based on your preference
   plugins: [],
 };

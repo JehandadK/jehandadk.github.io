@@ -1,12 +1,15 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { ThemeSwitch } from './ThemeSwitch';
 
 type INavbarProps = {
   logo: ReactNode;
   children: ReactNode;
 };
 
-const NavbarTwoColumns = (props: INavbarProps) => (
+const NavbarTwoColumns = (props: INavbarProps) => {
+
+  return (
   <div className="flex flex-wrap items-center justify-between">
     <div>
       <Link href="/">{props.logo}</Link>
@@ -15,6 +18,9 @@ const NavbarTwoColumns = (props: INavbarProps) => (
     <nav>
       <ul className="navbar flex items-center text-xl font-medium text-gray-800">
         {props.children}
+        <li>
+          <ThemeSwitch />
+        </li>
       </ul>
     </nav>
 
@@ -31,5 +37,6 @@ const NavbarTwoColumns = (props: INavbarProps) => (
     </style>
   </div>
 );
+};
 
 export { NavbarTwoColumns };
