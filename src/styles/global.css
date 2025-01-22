@@ -55,14 +55,10 @@
   }
   
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
+    @apply bg-white dark:bg-dark text-foreground transition-colors duration-300;
   }
   
   /* Dark mode specific styles */
-  .dark body {
-    @apply bg-dark text-dark;
-  }
-  
   .dark a {
     @apply text-blue-400 hover:text-blue-300;
   }
