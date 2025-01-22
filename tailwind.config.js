@@ -1,5 +1,6 @@
 module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: 'class',
   theme: {
     fontSize: {
       xs: '0.75rem',
@@ -15,16 +16,48 @@ module.exports = {
     },
     extend: {
       colors: {
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
         primary: {
-          100: '#E6F6FE',
-          200: '#C0EAFC',
-          300: '#9ADDFB',
-          400: '#4FC3F7',
-          500: '#03A9F4',
-          600: '#0398DC',
-          700: '#026592',
-          800: '#014C6E',
-          900: '#013349',
+          100: '#e6e5e1',
+          200: '#cdccc2',
+          300: '#acab9c',
+          400: '#8b8976',
+          500: '#706f5c',
+          600: '#595848',
+          700: '#49493c',
+          800: '#3b3c33',
+          900: '#2c2c26',
+          950: '#1c1c17',
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
         },
         gray: {
           100: '#f7fafc',
@@ -36,30 +69,21 @@ module.exports = {
           700: '#4a5568',
           800: '#2d3748',
           900: '#1a202c',
-
-          // Dark mode colors
-          DEFAULT: '#374151', // Set this as the default dark gray
-          'dark-100': '#1F2937', // Darker than gray-500
-          'dark-200': '#111827', // Darker than gray-700
         },
-        // You can define additional colors for dark theme here
-        dark: {
-          100: '#f1f5f9', // Light gray for dark mode
-          200: '#d1d5db', // Gray for dark mode
-          300: '#9ca3af', // Medium gray for dark mode
-          400: '#6b7280', // Dark gray for dark mode
-          500: '#4b5563', // Darker gray for dark mode
-          600: '#374151', // Darker gray for dark mode
-          700: '#1f2937', // Dark gray for dark mode
-          800: '#1a202c', // Very dark gray for dark mode
-          900: '#0f172a', // Almost black for dark mode
-        },
+        dark: '#1a1a1a',
       },
-      lineHeight: {
-        hero: '4.5rem',
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      backgroundColor: {
+        dark: '#1a202c',
+      },
+      textColor: {
+        dark: '#f7fafc',
       },
     },
   },
-  darkMode: 'class', // or 'media' based on your preference
   plugins: [],
 };

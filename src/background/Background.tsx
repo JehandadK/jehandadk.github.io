@@ -1,10 +1,8 @@
-import { type FC } from "react";
-import Particles from "@tsparticles/react";
-// import { loadSlim } from "@tsparticles/slim";
-import {
-  // type Engine,
-  MoveDirection
-} from "@tsparticles/engine";
+import { MoveDirection } from '@tsparticles/engine';
+import Particles from '@tsparticles/react';
+import { type FC } from 'react';
+
+import { useTheme } from '../context/ThemeContext';
 
 interface IBackgroundProps {
   color?: string;
@@ -12,9 +10,7 @@ interface IBackgroundProps {
 }
 
 const Background: FC<IBackgroundProps> = ({ color, children }) => {
-  // const particlesInit = async (engine: Engine) => {
-  //   await loadSlim(engine);
-  // };
+  const { theme } = useTheme();
 
   const particlesOptions = {
     fullScreen: {
@@ -30,20 +26,20 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
         },
       },
       color: {
-        value: "#ffffff",
+        value: theme === 'dark' ? '#4a5568' : '#e3e9f0',
       },
       shape: {
-        type: "circle",
+        type: 'circle',
         stroke: {
           width: 0,
-          color: "#000000",
+          color: '#000000',
         },
         polygon: {
           nb_sides: 5,
         },
       },
       opacity: {
-        value: 0.5,
+        value: 0.8,
         random: false,
         anim: {
           enable: false,
@@ -53,7 +49,7 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
         },
       },
       size: {
-        value: 5,
+        value: 3,
         random: true,
         anim: {
           enable: false,
@@ -62,13 +58,20 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
           sync: false,
         },
       },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: theme === 'dark' ? '#4a5568' : '#e2e8f0',
+        opacity: 0.2,
+        width: 1,
+      },
       move: {
         enable: true,
-        speed: 6,
+        speed: 2,
         direction: MoveDirection.none,
         random: false,
         straight: false,
-        out_mode: "out",
+        out_mode: 'out',
         bounce: false,
         attract: {
           enable: false,
@@ -78,18 +81,15 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
       },
     },
     interactivity: {
-      detect_on: "canvas",
+      detect_on: 'window',
       events: {
-        onClick: {
-          enable: true,
-          mode: "push",
-        },
         onHover: {
           enable: true,
-          mode: "repulse",
+          mode: 'repulse',
         },
-        resize: {
+        onClick: {
           enable: true,
+          mode: 'push',
         },
       },
       modes: {
@@ -107,7 +107,7 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
           speed: 3,
         },
         repulse: {
-          distance: 200,
+          distance: 100,
           duration: 0.4,
         },
         push: {
@@ -122,19 +122,8 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
   };
 
   return (
-    <div className={color ? color : ''} style={{ position: 'relative' }}>
-      <Particles
-        id="tsparticles"
-        options={particlesOptions}
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          top: 0,
-          left: 0,
-          zIndex: 1,
-        }}
-      />
+    <div className={`min-h-screen w-full ${color}`}>
+      <Particles id="tsparticles" options={particlesOptions} />
       {children}
     </div>
   );

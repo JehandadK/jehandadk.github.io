@@ -1,36 +1,26 @@
 import { useEffect, useState } from 'react';
 import { DarkModeSwitch } from 'react-toggle-dark-mode';
 
+import { useTheme } from '../context/ThemeContext';
+
 const ThemeSwitch = () => {
-  // Get initial theme from localStorage or default to light mode
-  const [darkMode, setDarkMode] = useState(false);
+  const { theme, toggleTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedTheme = window.localStorage.getItem('theme');
-      setDarkMode(storedTheme === 'dark');
-    }
+    setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      window.localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      window.localStorage.setItem('theme', 'light');
-    }
-  }, [darkMode]);
-
-  const handleToggle = () => {
-    setDarkMode(!darkMode);
-  };
+  if (!mounted) return null;
 
   return (
     <DarkModeSwitch
-      onChange={handleToggle}
-      checked={darkMode}
-      size={80}
+      onChange={toggleTheme}
+      checked={theme === 'dark'}
+      size={24}
+      className="text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+      moonColor="currentColor"
+      sunColor="currentColor"
     />
   );
 };
