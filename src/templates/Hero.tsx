@@ -78,7 +78,7 @@ const Hero = () => {
                 </span>
               </>
             }
-            description="Systems Engineer · Former CTO · LLM Engineer · Student"
+            description="Systems Engineer · CoFounder · LLM Evangelist"
           />
         </Section>
       </div>
