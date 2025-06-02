@@ -4,6 +4,48 @@
 
 @import './hero-styles.css';
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Company logo animations */
+.company-logo {
+  transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.company-logo:hover {
+  transform: translateY(-8px) scale(1.05);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
