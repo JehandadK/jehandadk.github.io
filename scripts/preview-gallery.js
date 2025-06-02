@@ -323,6 +323,11 @@ function generateGalleryHTML() {
             color: #666;
         }
         
+        .item-type {
+            font-size: 0.7rem;
+            color: #999;
+        }
+        
         .download-btn {
             background: #667eea;
             color: white;
@@ -406,6 +411,71 @@ function generateGalleryHTML() {
                 font-size: 2rem;
             }
         }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .comparison-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            align-items: start;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+            padding: 15px;
+        }
+        
+        .comparison-side {
+            text-align: center;
+        }
+        
+        .comparison-side h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .comparison-side img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        
+        .diff-side {
+            text-align: center;
+            position: relative;
+        }
+        
+        .diff-canvas {
+            width: 100%;
+            height: 200px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            background: #f8f9fa;
+        }
+        
+        .diff-info {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .no-match {
+            color: #dc3545;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+            background: #f8d7da;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -467,7 +537,7 @@ function generateGalleryHTML() {
                 (version) => `
             <div class="section">
                 <h2 class="section-title">
-                    ${version.version} Screenshots
+                    ${version.version} - Screenshots & Videos
                 </h2>
                 <div class="grid">
                     ${version.screenshots
@@ -479,6 +549,7 @@ function generateGalleryHTML() {
                                 <div class="item-name">${screenshot.name}</div>
                                 <div class="item-meta">
                                     <span>${screenshot.size}</span>
+                                    <span class="item-type">📸 Screenshot</span>
                                 </div>
                                 <button class="download-btn" onclick="downloadFile('${screenshot.path}', '${screenshot.name}')">
                                     ⬇️ Download
@@ -488,20 +559,6 @@ function generateGalleryHTML() {
                     `,
                       )
                       .join('')}
-                </div>
-            </div>
-            `,
-              )
-              .join('')}
-            
-            ${versions
-              .map(
-                (version) => `
-            <div class="section">
-                <h2 class="section-title">
-                    ${version.version} GIFs & Videos
-                </h2>
-                <div class="grid">
                     ${version.gifs
                       .map(
                         (gif) => `
@@ -514,6 +571,7 @@ function generateGalleryHTML() {
                                 <div class="item-name">${gif.name}</div>
                                 <div class="item-meta">
                                     <span>${gif.size}</span>
+                                    <span class="item-type">🎬 Video</span>
                                 </div>
                                 <button class="download-btn" onclick="downloadFile('${gif.path}', '${gif.name}')">
                                     ⬇️ Download
@@ -562,40 +620,63 @@ function generateGalleryHTML() {
                 comparisonContent1.innerHTML = '';
                 comparisonContent2.innerHTML = '';
                 
-                // Create comparison grid for version 1
-                const grid1 = document.createElement('div');
-                grid1.classList.add('comparison-grid');
+                // Create a single comparison grid
+                const comparisonGrid = document.createElement('div');
+                comparisonGrid.classList.add('comparison-grid');
                 
-                version1Data.screenshots.forEach(screenshot => {
-                    const item = document.createElement('div');
-                    item.classList.add('comparison-item');
-                    item.innerHTML = \`
-                        <img src="\${screenshot.path}" alt="\${screenshot.name}" loading="lazy">
-                        <div class="comparison-item-info">
-                            <span>\${screenshot.name}</span>
-                        </div>
-                    \`;
-                    grid1.appendChild(item);
+                // Match screenshots by name between versions
+                const matchedScreenshots = [];
+                version1Data.screenshots.forEach(screenshot1 => {
+                    const screenshot2 = version2Data.screenshots.find(s => s.name === screenshot1.name);
+                    if (screenshot2) {
+                        matchedScreenshots.push({ version1: screenshot1, version2: screenshot2 });
+                    }
                 });
                 
-                // Create comparison grid for version 2
-                const grid2 = document.createElement('div');
-                grid2.classList.add('comparison-grid');
-                
-                version2Data.screenshots.forEach(screenshot => {
+                // Create comparison items for matched screenshots
+                matchedScreenshots.forEach(match => {
                     const item = document.createElement('div');
                     item.classList.add('comparison-item');
-                    item.innerHTML = \`
-                        <img src="\${screenshot.path}" alt="\${screenshot.name}" loading="lazy">
-                        <div class="comparison-item-info">
-                            <span>\${screenshot.name}</span>
-                        </div>
-                    \`;
-                    grid2.appendChild(item);
+                    item.innerHTML = 
+                        '<div class="comparison-side">' +
+                            '<h4>' + version1 + '</h4>' +
+                            '<img src="' + match.version1.path + '" alt="' + match.version1.name + '" loading="lazy">' +
+                            '<div class="diff-info">' + match.version1.name + '</div>' +
+                        '</div>' +
+                        '<div class="diff-side">' +
+                            '<h4>Visual Diff</h4>' +
+                            '<canvas class="diff-canvas" width="400" height="200"></canvas>' +
+                            '<div class="diff-info">Differences highlighted</div>' +
+                        '</div>' +
+                        '<div class="comparison-side">' +
+                            '<h4>' + version2 + '</h4>' +
+                            '<img src="' + match.version2.path + '" alt="' + match.version2.name + '" loading="lazy">' +
+                            '<div class="diff-info">' + match.version2.name + '</div>' +
+                        '</div>';
+                    comparisonGrid.appendChild(item);
                 });
                 
-                comparisonContent1.appendChild(grid1);
-                comparisonContent2.appendChild(grid2);
+                // Show message if no matches found
+                if (matchedScreenshots.length === 0) {
+                    const noMatchMsg = document.createElement('div');
+                    noMatchMsg.classList.add('no-match');
+                    noMatchMsg.textContent = 'No matching screenshots found between these versions.';
+                    comparisonGrid.appendChild(noMatchMsg);
+                }
+                
+                comparisonContent1.appendChild(comparisonGrid);
+                
+                // Calculate visual diffs after images load
+                setTimeout(() => {
+                    const diffCanvases = comparisonGrid.querySelectorAll('.diff-canvas');
+                    diffCanvases.forEach((canvas, index) => {
+                        const match = matchedScreenshots[index];
+                        if (match) {
+                            createVisualDiff(canvas, match.version1.path, match.version2.path);
+                        }
+                    });
+                }, 500);
+                
             }).catch(error => {
                 console.error('Failed to load version data:', error);
                 alert('Failed to load version data for comparison');
@@ -618,6 +699,83 @@ function generateGalleryHTML() {
             link.click();
             document.body.removeChild(link);
         }
+        
+        function createVisualDiff(canvas, img1Path, img2Path) {
+            const ctx = canvas.getContext('2d');
+            const img1 = new Image();
+            const img2 = new Image();
+            
+            img1.crossOrigin = 'anonymous';
+            img2.crossOrigin = 'anonymous';
+            
+            let loadedCount = 0;
+            
+            function onImageLoad() {
+                loadedCount++;
+                if (loadedCount === 2) {
+                    // Clear canvas
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Create temporary canvases for processing
+                    const tempCanvas1 = document.createElement('canvas');
+                    const tempCanvas2 = document.createElement('canvas');
+                    tempCanvas1.width = tempCanvas2.width = canvas.width;
+                    tempCanvas1.height = tempCanvas2.height = canvas.height;
+                    
+                    const tempCtx1 = tempCanvas1.getContext('2d');
+                    const tempCtx2 = tempCanvas2.getContext('2d');
+                    
+                    // Draw images to temp canvases
+                    tempCtx1.drawImage(img1, 0, 0, canvas.width, canvas.height);
+                    tempCtx2.drawImage(img2, 0, 0, canvas.width, canvas.height);
+                    
+                    // Get image data
+                    const imageData1 = tempCtx1.getImageData(0, 0, canvas.width, canvas.height);
+                    const imageData2 = tempCtx2.getImageData(0, 0, canvas.width, canvas.height);
+                    const diffData = ctx.createImageData(canvas.width, canvas.height);
+                    
+                    // Calculate pixel differences
+                    let diffPixels = 0;
+                    for (let i = 0; i < imageData1.data.length; i += 4) {
+                        const r1 = imageData1.data[i];
+                        const g1 = imageData1.data[i + 1];
+                        const b1 = imageData1.data[i + 2];
+                        
+                        const r2 = imageData2.data[i];
+                        const g2 = imageData2.data[i + 1];
+                        const b2 = imageData2.data[i + 2];
+                        
+                        const diff = Math.abs(r1 - r2) + Math.abs(g1 - g2) + Math.abs(b1 - b2);
+                        
+                        if (diff > 30) { // Threshold for significant difference
+                            diffData.data[i] = 255;     // Red
+                            diffData.data[i + 1] = 0;   // Green
+                            diffData.data[i + 2] = 0;   // Blue
+                            diffData.data[i + 3] = 180; // Alpha
+                            diffPixels++;
+                        } else {
+                            diffData.data[i] = r1;
+                            diffData.data[i + 1] = g1;
+                            diffData.data[i + 2] = b1;
+                            diffData.data[i + 3] = 50; // Low alpha for unchanged areas
+                        }
+                    }
+                    
+                    // Draw the diff
+                    ctx.putImageData(diffData, 0, 0);
+                    
+                    // Update diff info
+                    const diffInfo = canvas.parentNode.querySelector('.diff-info');
+                    const diffPercentage = ((diffPixels / (canvas.width * canvas.height)) * 100).toFixed(2);
+                    diffInfo.textContent = diffPercentage + '% different';
+                }
+            }
+            
+            img1.onload = onImageLoad;
+            img2.onload = onImageLoad;
+            img1.src = img1Path;
+            img2.src = img2Path;
+        }
     </script>
 </body>
 </html>
@@ -637,10 +795,31 @@ function startServer() {
       return;
     }
 
-    // Serve screenshots
-    if (pathname.startsWith('/visual/')) {
-      const filename = pathname.replace('/visual/', '');
-      const filepath = path.join(TEMP_DIR, 'visual', filename);
+    // Serve version data (API routes first!)
+    if (pathname.startsWith('/api/version/')) {
+      const versionName = pathname.replace('/api/version/', '');
+      
+      // Load fresh version data for each request
+      const currentVersionsData = loadVersionsData();
+      const versionData = currentVersionsData.find((v) => v.version === versionName);
+
+      if (versionData) {
+        res.writeHead(200, { 
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        });
+        res.end(JSON.stringify(versionData));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Version not found', available: currentVersionsData.map(v => v.version) }));
+      }
+      return;
+    }
+
+    // Serve screenshots and other files
+    if (pathname.startsWith('/')) {
+      const filename = pathname.replace('/', '');
+      const filepath = path.join(TEMP_DIR, filename);
 
       if (fs.existsSync(filepath)) {
         const ext = path.extname(filename).toLowerCase();
@@ -655,21 +834,6 @@ function startServer() {
       } else {
         res.writeHead(404);
         res.end('File not found');
-      }
-      return;
-    }
-
-    // Serve version data
-    if (pathname.startsWith('/api/version/')) {
-      const versionName = pathname.replace('/api/version/', '');
-      const versionData = versionsData.find((v) => v.version === versionName);
-
-      if (versionData) {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(versionData));
-      } else {
-        res.writeHead(404);
-        res.end('Version not found');
       }
       return;
     }

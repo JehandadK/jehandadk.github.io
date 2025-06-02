@@ -62,5 +62,14 @@
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "**/*.{json,yaml,yml,md}": [
+      "prettier --write"
+    ]
+  },
   "license": "ISC"
 }
