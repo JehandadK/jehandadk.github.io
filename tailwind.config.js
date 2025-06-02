@@ -15,6 +15,11 @@ module.exports = {
       '6xl': '4rem',
     },
     extend: {
+      fontFamily: {
+        body: ['Inter', 'ui-sans-serif', 'system-ui'],
+        heading: ['Poppins', 'ui-sans-serif', 'system-ui'],
+        display: ['Space Grotesk', 'ui-sans-serif', 'system-ui'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

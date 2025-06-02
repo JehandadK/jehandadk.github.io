@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import type { ReactNode } from 'react';
 
 type ISectionProps = {
@@ -9,9 +10,7 @@ type ISectionProps = {
 
 const Section = (props: ISectionProps) => (
   <div
-    className={`mx-auto max-w-screen-lg px-3 ${
-      props.yPadding ? props.yPadding : 'py-16'
-    }`}
+    className={clsx('mx-auto max-w-screen-lg px-3', props.yPadding || 'py-16')}
   >
     {(props.title || props.description) && (
       <div className="mb-12 text-center">

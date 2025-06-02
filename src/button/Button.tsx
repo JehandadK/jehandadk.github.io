@@ -1,4 +1,4 @@
-import className from 'classnames';
+import clsx from 'clsx';
 
 type IButtonProps = {
   xl?: boolean;
@@ -6,40 +6,16 @@ type IButtonProps = {
 };
 
 const Button = (props: IButtonProps) => {
-  const btnClass = className({
-    btn: true,
-    'btn-xl': props.xl,
-    'btn-base': !props.xl,
-    'btn-primary': true,
-  });
-
   return (
-    <div className={btnClass}>
+    <div
+      className={clsx(
+        'inline-block rounded-md bg-primary-500 text-center text-white transition-colors hover:bg-primary-600',
+        props.xl
+          ? 'px-6 py-4 text-xl font-extrabold'
+          : 'px-4 py-2 text-lg font-semibold',
+      )}
+    >
       {props.children}
-
-      <style jsx>
-        {`
-          .btn {
-            @apply inline-block rounded-md text-center;
-          }
-
-          .btn-base {
-            @apply text-lg font-semibold py-2 px-4;
-          }
-
-          .btn-xl {
-            @apply font-extrabold text-xl py-4 px-6;
-          }
-
-          .btn-primary {
-            @apply text-white bg-primary-500;
-          }
-
-          .btn-primary:hover {
-            @apply bg-primary-600;
-          }
-        `}
-      </style>
     </div>
   );
 };

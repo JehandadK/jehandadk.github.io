@@ -22,7 +22,7 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
         value: 100,
         density: {
           enable: true,
-          value_area: 800,
+          area: 800,
         },
       },
       color: {
@@ -35,30 +35,30 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
           color: '#000000',
         },
         polygon: {
-          nb_sides: 5,
+          sides: 5,
         },
       },
       opacity: {
-        value: 0.8,
+        value: 0.5,
         random: false,
-        anim: {
+        animation: {
           enable: false,
           speed: 1,
-          opacity_min: 0.1,
+          minimumValue: 0.1,
           sync: false,
         },
       },
       size: {
         value: 3,
         random: true,
-        anim: {
+        animation: {
           enable: false,
           speed: 40,
-          size_min: 0.1,
+          minimumValue: 0.1,
           sync: false,
         },
       },
-      line_linked: {
+      links: {
         enable: true,
         distance: 150,
         color: theme === 'dark' ? '#4a5568' : '#e2e8f0',
@@ -71,7 +71,7 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
         direction: MoveDirection.none,
         random: false,
         straight: false,
-        out_mode: 'out',
+        outModes: 'out' as const,
         bounce: false,
         attract: {
           enable: false,
@@ -81,7 +81,7 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
       },
     },
     interactivity: {
-      detect_on: 'window',
+      detectsOn: 'window' as const,
       events: {
         onHover: {
           enable: true,
@@ -95,7 +95,7 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
       modes: {
         grab: {
           distance: 400,
-          line_linked: {
+          links: {
             opacity: 1,
           },
         },
@@ -104,21 +104,20 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
           size: 40,
           duration: 2,
           opacity: 8,
-          speed: 3,
         },
         repulse: {
           distance: 100,
           duration: 0.4,
         },
         push: {
-          particles_nb: 4,
+          quantity: 4,
         },
         remove: {
-          particles_nb: 2,
+          quantity: 2,
         },
       },
     },
-    retina_detect: true,
+    detectRetina: true,
   };
 
   return (
