@@ -11,6 +11,7 @@ interface IBackgroundProps {
 
 const Background: FC<IBackgroundProps> = ({ color, children }) => {
   const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   const particlesOptions = {
     fullScreen: {
@@ -19,60 +20,63 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
     },
     particles: {
       number: {
-        value: 100,
+        value: isDark ? 100 : 60,
         density: {
           enable: true,
           area: 800,
         },
       },
       color: {
-        value: theme === 'dark' ? '#4a5568' : '#e3e9f0',
+        value: isDark
+          ? ['#64748B', '#94A3B8', '#CBD5E1'] // Subtle grays/blues for dark theme
+          : ['#475569', '#64748B', '#94A3B8'], // Darker grays for light theme
       },
       shape: {
-        type: 'circle',
+        type: ['circle', 'triangle', 'polygon'] as string[],
         stroke: {
           width: 0,
           color: '#000000',
         },
         polygon: {
-          sides: 5,
+          sides: 6,
         },
       },
       opacity: {
-        value: 0.5,
-        random: false,
+        value: isDark ? 0.4 : 0.3,
+        random: true,
         animation: {
-          enable: false,
-          speed: 1,
-          minimumValue: 0.1,
+          enable: true,
+          speed: 0.2,
+          minimumValue: isDark ? 0.1 : 0.05,
           sync: false,
         },
       },
       size: {
-        value: 3,
+        value: isDark ? 2.5 : 2,
         random: true,
         animation: {
-          enable: false,
-          speed: 40,
-          minimumValue: 0.1,
+          enable: true,
+          speed: 1,
+          minimumValue: 0.5,
           sync: false,
         },
       },
-      links: {
+      lineLinked: {
         enable: true,
-        distance: 150,
-        color: theme === 'dark' ? '#4a5568' : '#e2e8f0',
-        opacity: 0.2,
-        width: 1,
+        distance: isDark ? 120 : 100,
+        color: isDark ? '#374151' : '#9CA3AF',
+        opacity: isDark ? 0.2 : 0.15,
+        width: 0.5,
       },
       move: {
         enable: true,
-        speed: 2,
+        speed: 0.8,
         direction: MoveDirection.none,
-        random: false,
+        random: true,
         straight: false,
-        outModes: 'out' as const,
-        bounce: false,
+        outModes: {
+          default: 'bounce' as const,
+        },
         attract: {
           enable: false,
           rotateX: 600,
@@ -81,49 +85,52 @@ const Background: FC<IBackgroundProps> = ({ color, children }) => {
       },
     },
     interactivity: {
-      detectsOn: 'window' as const,
+      detectsOn: 'canvas' as const,
       events: {
         onHover: {
           enable: true,
-          mode: 'repulse',
+          mode: 'bubble',
         },
         onClick: {
           enable: true,
-          mode: 'push',
+          mode: 'repulse',
+        },
+        resize: {
+          enable: true,
         },
       },
       modes: {
         grab: {
-          distance: 400,
-          links: {
-            opacity: 1,
+          distance: 140,
+          lineLinked: {
+            opacity: 0.5,
           },
         },
         bubble: {
-          distance: 400,
-          size: 40,
-          duration: 2,
-          opacity: 8,
+          distance: 200,
+          size: 6,
+          duration: 0.3,
+          opacity: 0.8,
         },
         repulse: {
-          distance: 100,
+          distance: 150,
           duration: 0.4,
         },
         push: {
-          quantity: 4,
+          quantity: 2,
         },
         remove: {
           quantity: 2,
         },
       },
     },
-    detectRetina: true,
-  };
+    retina_detect: true,
+  } as const;
 
   return (
-    <div className={`min-h-screen w-full ${color}`}>
-      <Particles id="tsparticles" options={particlesOptions} />
-      {children}
+    <div className={`relative ${color}`}>
+      <Particles options={particlesOptions} />
+      <div className="relative z-10">{children}</div>
     </div>
   );
 };
